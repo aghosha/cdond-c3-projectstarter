@@ -151,4 +151,7 @@ workflows:
       - test-backend:
           requires: [build-backend]
       - configure-infrastructure:
-          Requires: [test_frontend,test_backend]
+          requires: [test-frontend, test-backend]
+          filters:
+            branches:
+              only: [master]
