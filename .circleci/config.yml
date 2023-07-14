@@ -173,4 +173,4 @@ jobs:
 workflows:
   default:
     jobs:
-       - run-migrations:
+       - run-migrations
