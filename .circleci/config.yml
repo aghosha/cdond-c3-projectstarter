@@ -14,7 +14,7 @@ commands:
             exit 0
       - run:
           name: Destroy environments
-          when: on_fail
+          #when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
@@ -114,6 +114,7 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -138,7 +139,7 @@ jobs:
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-      - destroy-infrastructure
+      #- destroy-infrastructure
 
 workflows:
   default:
@@ -149,8 +150,5 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend]
-          filters:
-            branches:
-              only: [master]
+      - configure-infrastructure:
+          Requires: [test_frontend,test_backend]
